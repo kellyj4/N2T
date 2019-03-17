@@ -1,0 +1,36 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Not.hdl
+
+/**
+ * Not gate:
+ * out = not in
+ */
+
+// JXK implementation
+CHIP Not {
+    IN in;
+    OUT out;
+
+    /**
+    *   Nand TT  Nor TT
+    *   -------  ------- 
+    *   0 0 | 1  0 | 1 
+    *   0 1 | 1  - | -
+    *   1 0 | 1  - | -
+    *   1 1 | 0  1 | 0
+    *
+    *   Total composite gates (1 | Not )
+    *   Total Nand gates used (1 | Nand == 1)
+    *   
+    *    ------|\ 
+    *      |   | |----
+    *      |---|/
+    *   
+    *
+    **/
+
+    PARTS:
+    Nand(a=in, b=in, out=out);
+}

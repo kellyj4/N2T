@@ -1,0 +1,41 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Xor.hdl
+
+/**
+ * Exclusive-or gate:
+ * out = not (a == b)
+ */
+
+// JXK implementation
+CHIP Xor {
+    IN a, b;
+    OUT out;
+
+    /**
+    *   Nand TT  Or TT    Nand . Or
+    *   -------  -------  ---------
+    *   0 0 | 1  0 0 | 0  1 0 | 0
+    *   0 1 | 1  0 1 | 1  1 1 | 1
+    *   1 0 | 1  1 0 | 1  1 1 | 1
+    *   1 1 | 0  1 1 | 1  1 1 | 0
+    *
+    *   Total composite gates (3 | Nand, Or & And)
+    *   Total Nand gates used (6 | And == 2, Or == 3 & Nand == 1)
+    *
+    *    ----|\ ntout
+    *    Nand| |-------|
+    *    ----|/        |-------|\     out
+    *                      And | |----
+    *    ----|\ obout  |-------|/
+    *    Or  | |-------|
+    *    ----|/
+    *
+    **/
+
+    PARTS:
+    Nand(a=a, b=b, out=ntout);
+    Or(a=a, b=b, out=obout);
+    And(a=ntout, b=obout, out=out);
+}
