@@ -1,0 +1,49 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux.hdl
+
+/** 
+ * Multiplexor:
+ * out = a if sel == 0
+ *       b otherwise
+ */
+
+// JXK implementation
+CHIP Mux {
+    IN a, b, sel;
+    OUT out;
+
+    /**  MUX TT          ---                        ---
+    *   a b sel| out   a sel | out  b sel | out  (a.sel) + (b.sel) == mux
+    *   ------------   -----------  -----------
+    *   0 0  0 | 0     0  1  |  0   -  -  |  -
+    *   0 1  0 | 0     0  1  |  0   -  -  |  -
+    *   1 0  0 | 1     1  1  |  1   -  -  |  -
+    *   1 1  0 | 1     1  1  |  1   -  -  |  -
+    *   0 0  1 | 0     -  -  |  -   0  1  |  0
+    *   0 1  1 | 1     -  -  |  -   1  1  |  1
+    *   1 0  1 | 0     -  -  |  -   0  1  |  0
+    *   1 1  1 | 1     -  -  |  -   1  1  |  1
+    *
+    *   Total composite gates (1 x Not, 2 x And & 1 x Or)
+    *   Total Nand gates used (8 | Not == 1, And == 2, Or == 3)
+    *           
+    *           a 
+    *          ----|\ lvl2tand
+    *   sel |\ ^sel| |------|
+    *   ----| |----|/       |-----|\  out
+    *       |/                    | |-----
+    *           sel         |-----|/
+    *           ----|\      |
+    *               | |-----|
+    *           ----|/ lvl2band
+    *           b
+    **/
+
+    PARTS:
+    Not(in=sel,out=notsel);
+    And(a=a,b=notsel,out=lvl2tand);
+    And(a=sel,b=b,out=lvl2band);
+    Or(a=lvl2tand,b=lvl2band,out=out); 
+}
