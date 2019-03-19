@@ -1,0 +1,42 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/DMux.hdl
+
+/**
+ * Demultiplexor:
+ * {a, b} = {in, 0} if sel == 0
+ *          {0, in} if sel == 1
+ */
+
+ /**                    in sel  a  b   a = ^sel.in  b = sel.in  
+ *                      ------------   
+ *                      0   0   0  0   
+ *                      1   0   1  0   
+ *                      0   1   0  0   
+ *                      1   1   0  1   
+ *
+ *   Total composite gates (3 | Not, And)
+ *   Total Nand gates used (5 | Not == 1, And == 4 )
+ *
+ *      |--|\  ^sel
+ *  sel |  | |---------|\     a
+ *     -|--|/    in    | |-----
+ *      |         -|---|/
+ *      |          |
+ *      |          ----|\     b
+ *      |              | |-----
+ *      ---------------|/
+ *
+ */
+
+// JXK implementation
+CHIP DMux {
+    IN in, sel;
+    OUT a, b;
+
+    PARTS:
+    Not(in=sel,out=aout);
+    And(a=aout, b=in, out=a);
+    And(a=in, b=sel, out=b);
+}
